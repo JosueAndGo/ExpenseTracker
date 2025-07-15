@@ -2,7 +2,7 @@ package com.jag.ExpenseTracker.controller;
 
 import com.jag.ExpenseTracker.dtos.MessageDTO;
 import com.jag.ExpenseTracker.models.User;
-import com.jag.ExpenseTracker.service.UserServiceImp;
+import com.jag.ExpenseTracker.service.users.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,11 +18,11 @@ public class RegisterController {
 
     @PostMapping("/user")
     public ResponseEntity<MessageDTO> saveUser(@RequestBody User user) {
-        return userServiceImp.saveUser(user,"ROLE_USER");
+        return userServiceImp.saveUser(user,"USER");
     }
 
     @PostMapping("/admin")
     public ResponseEntity<MessageDTO> saveAdmin(@RequestBody User user) {
-        return userServiceImp.saveUser(user,"ROLE_ADMIN");
+        return userServiceImp.saveUser(user,"ADMIN");
     }
 }

@@ -34,7 +34,7 @@ public class SecurityConfig {
 
         return http.csrf(customize ->  customize.disable()) //Deshabilida el token
                .authorizeHttpRequests(request -> request
-                       .requestMatchers("/user/login","/register/user").permitAll()
+                       .requestMatchers("/user/login","/register/user", "/register/admin").permitAll()
                        .anyRequest().authenticated()) //Pide autenticarse en cada peticion
                .httpBasic(Customizer.withDefaults()) //Autenticacion para postman
                .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //Hace que en cada peticion sea diferente el iduser

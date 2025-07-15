@@ -1,4 +1,4 @@
-package com.jag.ExpenseTracker.service;
+package com.jag.ExpenseTracker.service.users;
 
 import com.jag.ExpenseTracker.dtos.LoginUserDTO;
 import com.jag.ExpenseTracker.dtos.MessageDTO;
@@ -7,6 +7,7 @@ import com.jag.ExpenseTracker.models.User;
 import com.jag.ExpenseTracker.models.UserPrincipal;
 import com.jag.ExpenseTracker.persistance.RoleRepository;
 import com.jag.ExpenseTracker.persistance.UserRepository;
+import com.jag.ExpenseTracker.service.jwt.JWTService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

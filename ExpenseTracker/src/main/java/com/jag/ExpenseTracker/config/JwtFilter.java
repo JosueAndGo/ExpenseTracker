@@ -1,7 +1,7 @@
 package com.jag.ExpenseTracker.config;
 
-import com.jag.ExpenseTracker.service.JWTService;
-import com.jag.ExpenseTracker.service.UserServiceImp;
+import com.jag.ExpenseTracker.service.jwt.JWTService;
+import com.jag.ExpenseTracker.service.users.UserServiceImp;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,13 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
