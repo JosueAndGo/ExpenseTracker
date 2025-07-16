@@ -1,7 +1,8 @@
 package com.jag.ExpenseTracker.service.users;
 
-import com.jag.ExpenseTracker.dtos.LoginUserDTO;
-import com.jag.ExpenseTracker.dtos.MessageDTO;
+import com.jag.ExpenseTracker.dtos.user.LoginUserDTO;
+import com.jag.ExpenseTracker.commons.MessageCustom;
+import com.jag.ExpenseTracker.dtos.user.UserRegisterDTO;
 import com.jag.ExpenseTracker.models.Roles;
 import com.jag.ExpenseTracker.models.User;
 import com.jag.ExpenseTracker.models.UserPrincipal;
@@ -28,7 +29,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public  class UserServiceImp implements UserDetailsService {
+public  class UserServiceImp implements UserDetailsService, UserService {
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -54,43 +55,49 @@ public  class UserServiceImp implements UserDetailsService {
 
 
 
-    public ResponseEntity<MessageDTO> saveUser(User user,String roleName) {
-        MessageDTO messageDTO = new MessageDTO();
+    public ResponseEntity<MessageCustom> saveUser(UserRegisterDTO user, String roleName) {
+        MessageCustom messageCustom = new MessageCustom();
         boolean emailExist = getUserbyEmail(user.getEmail()).isPresent();
         boolean userExist = getByUsername(user.getUsername()) != null;
         log.info("SaveUser service:{}", user);
 
         if (emailExist){
-            messageDTO.setMenssage("The email is already in use, try with another");
-            messageDTO.setStatusCode(400);
-            log.info("User created Exepcion:{}",messageDTO.getMenssage() );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageDTO);
+            messageCustom.setMenssage("The email is already in use, try with another");
+            messageCustom.setStatusCode(400);
+            log.info("User created Exepcion:{}", messageCustom.getMenssage() );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageCustom);
 
         }
         if (userExist){
-            messageDTO.setMenssage("The Username is already in use, try with another");
-            messageDTO.setStatusCode(400);
-            log.info("User created Exepcion:{}",messageDTO.getMenssage() );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageDTO);
+            messageCustom.setMenssage("The Username is already in use, try with another");
+            messageCustom.setStatusCode(400);
+            log.info("User created Exepcion:{}", messageCustom.getMenssage() );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageCustom);
         }
 
 
         Roles userRole = roleRepository.findByRole(roleName);
 
-        user.setRoles(Set.of(userRole));
-        user.setCreateAt(LocalDateTime.now());
-        user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.save(user);
-        messageDTO.setStatusCode(201);
-        messageDTO.setMenssage("user Created");
-        log.info("User created:{}, with email, {}",messageDTO, user.getEmail() );
-        return ResponseEntity.status(HttpStatus.CREATED).body(messageDTO);
+
+        User user1 = User.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(encoder.encode(user.getPassword()))
+                .createAt(LocalDateTime.now())
+                .roles(Set.of(userRole))
+                .build();
+
+        userRepository.save(user1);
+        messageCustom.setStatusCode(201);
+        messageCustom.setMenssage("user Created");
+        log.info("User created:{}, with email, {}", messageCustom, user.getEmail() );
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageCustom);
 
     }
 
 
-    public ResponseEntity<MessageDTO> loginUser(LoginUserDTO loginUserDTO) {
-        MessageDTO messageDTO = new MessageDTO();
+    public ResponseEntity<MessageCustom> loginUser(LoginUserDTO loginUserDTO) {
+        MessageCustom messageCustom = new MessageCustom();
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -102,17 +109,17 @@ public  class UserServiceImp implements UserDetailsService {
 
                 String token = jwtService.generateToken(userDetails);
 
-                messageDTO.setMenssage(token);
-                messageDTO.setStatusCode(200);
-                return ResponseEntity.status(HttpStatus.OK).body(messageDTO);
+                messageCustom.setMenssage(token);
+                messageCustom.setStatusCode(200);
+                return ResponseEntity.status(HttpStatus.OK).body(messageCustom);
             }
         } catch (Exception e) {
             log.error("Authentication failed", e);
         }
 
-        messageDTO.setMenssage("Fail");
-        messageDTO.setStatusCode(400);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageDTO);
+        messageCustom.setMenssage("Fail");
+        messageCustom.setStatusCode(400);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageCustom);
     }
 
 

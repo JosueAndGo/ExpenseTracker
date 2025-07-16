@@ -1,4 +1,4 @@
-package com.jag.ExpenseTracker.dtos;
+package com.jag.ExpenseTracker.dtos.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

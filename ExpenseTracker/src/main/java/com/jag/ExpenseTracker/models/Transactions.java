@@ -1,5 +1,6 @@
 package com.jag.ExpenseTracker.models;
 
+import com.jag.ExpenseTracker.commons.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +25,8 @@ public class Transactions {
 
     private Timestamp date;
 
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
